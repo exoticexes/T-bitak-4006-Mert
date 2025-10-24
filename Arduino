@@ -1,0 +1,40 @@
+void setup() {
+  Serial.begin(9600);  // Python ile iletişim için
+  pinMode(2, INPUT_PULLUP); // sağ
+  pinMode(3, INPUT_PULLUP); // sol
+  pinMode(4, INPUT_PULLUP); // yukarı
+  pinMode(5, INPUT_PULLUP); // aşağı
+}
+
+void loop() {
+  if (digitalRead(2) == LOW) Serial.println("RIGHT");
+  else if (digitalRead(3) == LOW) Serial.println("LEFT");
+  else if (digitalRead(4) == LOW) Serial.println("UP");
+  else if (digitalRead(5) == LOW) Serial.println("DOWN");
+  delay(100); // çok hızlı veri gitmesini önlemek için
+}
+
+~PYTHON
+
+import serial
+import pyautogui
+import time
+
+arduino = serial.Serial('COM3', 9600)
+time.sleep(2)  # Bağlantı otursun
+
+print("Subway Surfers Kontrol Sistemi Başlatıldı!")
+
+while True:
+    if arduino.in_waiting > 0:
+        data = arduino.readline().decode().strip()
+        print("Gelen veri:", data)
+
+        if data == "RIGHT":
+            pyautogui.press('right')
+        elif data == "LEFT":
+            pyautogui.press('left')
+        elif data == "UP":
+            pyautogui.press('up')
+        elif data == "DOWN":
+            pyautogui.press('down')
